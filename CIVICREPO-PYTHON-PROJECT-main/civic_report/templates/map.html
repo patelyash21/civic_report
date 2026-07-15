@@ -1,0 +1,517 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+overflow-x:hidden;
+}
+
+.container{
+padding:30px 6%;
+min-height:100vh;
+}
+
+/* Heading */
+
+.header{
+margin-bottom:25px;
+}
+
+.header h1{
+font-size:3rem;
+font-weight:700;
+background:linear-gradient(to right,#60a5fa,#c084fc);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+margin-bottom:10px;
+}
+
+.header p{
+color:#cbd5e1;
+font-size:1rem;
+}
+
+/* Map */
+
+.map-wrapper{
+position:relative;
+border-radius:24px;
+overflow:hidden;
+border:1px solid rgba(255,255,255,0.1);
+box-shadow:0 15px 40px rgba(0,0,0,0.4);
+}
+
+#map{
+height:650px;
+width:100%;
+z-index:1;
+}
+
+/* Floating Instructions */
+
+.map-info{
+position:absolute;
+top:20px;
+left:20px;
+z-index:1000;
+background:rgba(15,23,42,0.9);
+padding:15px 20px;
+border-radius:15px;
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,0.1);
+}
+
+.map-info h3{
+margin-bottom:8px;
+font-size:1rem;
+}
+
+.map-info p{
+font-size:0.9rem;
+color:#cbd5e1;
+}
+
+/* Report Modal */
+
+.report-panel{
+position:fixed;
+top:0;
+right:-500px;
+width:420px;
+height:100vh;
+background:#111827;
+padding:30px;
+transition:0.5s ease;
+z-index:2000;
+overflow-y:auto;
+box-shadow:-10px 0 30px rgba(0,0,0,0.5);
+}
+
+.report-panel.active{
+right:0;
+}
+
+.report-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+}
+
+.report-header h2{
+font-size:1.7rem;
+}
+
+.close-btn{
+background:#ef4444;
+border:none;
+color:white;
+padding:10px 14px;
+border-radius:10px;
+cursor:pointer;
+font-size:1rem;
+}
+
+.form-group{
+margin-bottom:22px;
+}
+
+.form-group label{
+display:block;
+margin-bottom:8px;
+font-weight:500;
+}
+
+.form-group textarea,
+.form-group input,
+.form-group select{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#1e293b;
+color:white;
+outline:none;
+}
+
+.form-group textarea{
+resize:none;
+height:120px;
+}
+
+.upload-box{
+border:2px dashed rgba(255,255,255,0.2);
+padding:25px;
+text-align:center;
+border-radius:15px;
+cursor:pointer;
+background:#1e293b;
+}
+
+.upload-box:hover{
+background:#263548;
+}
+
+/* Progress Section */
+
+.progress-card{
+background:#1e293b;
+padding:20px;
+border-radius:18px;
+margin-top:25px;
+}
+
+.progress-title{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+}
+
+.progress-bar{
+width:100%;
+height:12px;
+background:#334155;
+border-radius:20px;
+overflow:hidden;
+}
+
+.progress-fill{
+width:35%;
+height:100%;
+background:linear-gradient(to right,#3b82f6,#8b5cf6);
+border-radius:20px;
+animation:progressAnim 2s ease;
+}
+
+@keyframes progressAnim{
+from{
+width:0;
+}
+to{
+width:35%;
+}
+}
+
+.submit-btn{
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+background:linear-gradient(to right,#2563eb,#7c3aed);
+color:white;
+font-size:1rem;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+}
+
+.submit-btn:hover{
+transform:scale(1.02);
+}
+
+/* Coordinates */
+
+.location-box{
+background:#1e293b;
+padding:15px;
+border-radius:14px;
+margin-bottom:20px;
+font-size:0.95rem;
+color:#cbd5e1;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.report-panel{
+width:100%;
+}
+
+.header h1{
+font-size:2.3rem;
+}
+
+}
+
+</style>
+
+<div class="container">
+
+<div class="header">
+<h1>Civic Issue Smart Map</h1>
+
+<p>
+Click anywhere on the map to report a civic issue with live location tracking.
+</p>
+</div>
+
+<div class="map-wrapper">
+
+<div class="map-info">
+<h3>📍 Live Reporting Enabled</h3>
+<p>Tap any location to create a civic complaint report.</p>
+</div>
+
+<div id="map"></div>
+
+</div>
+
+</div>
+
+<!-- Report Panel -->
+
+<div class="report-panel" id="reportPanel">
+
+<div class="report-header">
+<h2>Report Issue</h2>
+
+<button class="close-btn" onclick="closePanel()">✕</button>
+</div>
+
+<div class="location-box" id="locationText">
+Selected Location: Waiting...
+</div>
+
+
+
+<div class="form-group">
+<label>Issue Type</label>
+
+<select>
+<option>Pothole</option>
+<option>Garbage Issue</option>
+<option>Water Leakage</option>
+<option>Electricity Problem</option>
+<option>Street Light Issue</option>
+<option>Drainage Problem</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Description</label>
+
+<textarea placeholder="Describe the issue in detail..."></textarea>
+</div>
+
+<div class="form-group">
+<label>Upload Photo</label>
+
+<div class="upload-box">
+📷 Click to Upload Image
+<input type="file" hidden>
+</div>
+</div>
+
+<button type="submit" class="submit-btn">
+Submit Report
+</button>
+
+
+
+<!-- Progress Tracking -->
+
+<div class="progress-card">
+
+<div class="progress-title">
+<span>Report Progress</span>
+<span>35%</span>
+</div>
+
+<div class="progress-bar">
+<div class="progress-fill"></div>
+</div>
+
+<p style="margin-top:15px;color:#cbd5e1;">
+Status: Complaint sent to local authority.
+</p>
+
+</div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+const csrftoken = '{{ csrf_token }}';
+
+/* Create Map */
+
+var map = L.map('map').setView([23.0225,72.5714],13);
+
+/* Map Layer */
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:19,
+    attribution:'© OpenStreetMap'
+}).addTo(map);
+
+/* Live Location */
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+    var lat = position.coords.latitude;
+    var lng = position.coords.longitude;
+
+    map.setView([lat,lng],15);
+
+    L.marker([lat,lng])
+    .addTo(map)
+    .bindPopup("📍 You are here")
+    .openPopup();
+
+}, function(){
+    alert("Location permission denied.");
+});
+
+/* Marker Variable */
+
+var marker;
+
+/* Map Click */
+
+map.on('click', function(e){
+
+    var lat = e.latlng.lat;
+    var lng = e.latlng.lng;
+
+    /* Remove old marker */
+
+    if(marker){
+        map.removeLayer(marker);
+    }
+
+    /* Add new marker */
+
+    marker = L.marker([lat,lng]).addTo(map);
+
+    /* Popup Form */
+
+    var popupForm = `
+    
+    <div style="width:300px;font-family:Poppins;">
+
+        <h3 style="
+            margin-bottom:15px;
+            color:#2563eb;
+        ">
+            Report Civic Issue
+        </h3>
+
+        <form method="POST"
+              action="/create-report/"
+              enctype="multipart/form-data">
+
+            <input type="hidden"
+                   name="csrfmiddlewaretoken"
+                   value="${csrftoken}">
+
+            <input type="hidden"
+                   name="latitude"
+                   value="${lat}">
+
+            <input type="hidden"
+                   name="longitude"
+                   value="${lng}">
+
+            <input type="text"
+                   name="title"
+                   placeholder="Issue Title"
+                   required
+                   style="
+                   width:100%;
+                   padding:10px;
+                   margin-bottom:10px;
+                   border:1px solid #ccc;
+                   border-radius:8px;
+                   ">
+
+            <select name="category"
+                    required
+                    style="
+                    width:100%;
+                    padding:10px;
+                    margin-bottom:10px;
+                    border:1px solid #ccc;
+                    border-radius:8px;
+                    ">
+
+                <option value="">Select Category</option>
+                <option value="Road Damage">Road Damage</option>
+                <option value="Garbage">Garbage</option>
+                <option value="Water Leakage">Water Leakage</option>
+                <option value="Street Light">Street Light</option>
+
+            </select>
+
+            <textarea
+                name="description"
+                placeholder="Describe issue..."
+                required
+                style="
+                width:100%;
+                height:90px;
+                padding:10px;
+                margin-bottom:10px;
+                border:1px solid #ccc;
+                border-radius:8px;
+                resize:none;
+                "></textarea>
+
+            <input type="file"
+                   name="image"
+                   style="
+                   margin-bottom:15px;
+                   ">
+
+            <button type="submit"
+                    style="
+                    width:100%;
+                    padding:12px;
+                    border:none;
+                    border-radius:10px;
+                    background:#2563eb;
+                    color:white;
+                    font-weight:600;
+                    cursor:pointer;
+                    ">
+
+                Submit Report
+
+            </button>
+
+        </form>
+
+    </div>
+    
+    `;
+
+    /* Open Popup */
+
+    L.popup()
+    .setLatLng(e.latlng)
+    .setContent(popupForm)
+    .openOn(map);
+
+});
+
+</script>
+
+{% endblock %}

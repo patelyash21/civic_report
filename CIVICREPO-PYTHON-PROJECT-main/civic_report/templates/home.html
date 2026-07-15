@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#0f172a;
+color:white;
+overflow-x:hidden;
+}
+
+.container{
+padding:50px 8%;
+min-height:100vh;
+position:relative;
+}
+
+/* Background Glow */
+
+.bg-glow{
+position:absolute;
+width:350px;
+height:350px;
+background:#2563eb;
+filter:blur(120px);
+opacity:0.25;
+top:-100px;
+left:-100px;
+z-index:0;
+}
+
+.bg-glow2{
+position:absolute;
+width:350px;
+height:350px;
+background:#7c3aed;
+filter:blur(120px);
+opacity:0.25;
+bottom:-100px;
+right:-100px;
+z-index:0;
+}
+
+/* Hero Section */
+
+.hero{
+position:relative;
+z-index:1;
+text-align:center;
+margin-bottom:60px;
+}
+
+.hero h1{
+font-size:3.5rem;
+font-weight:700;
+background:linear-gradient(to right,#60a5fa,#c084fc);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+margin-bottom:15px;
+}
+
+.hero p{
+font-size:1.1rem;
+color:#cbd5e1;
+max-width:700px;
+margin:auto;
+line-height:1.7;
+}
+
+/* Grid */
+
+.issue-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+gap:30px;
+position:relative;
+z-index:1;
+}
+
+/* Cards */
+
+.issue-card{
+background:rgba(255,255,255,0.07);
+backdrop-filter:blur(12px);
+border:1px solid rgba(255,255,255,0.1);
+border-radius:22px;
+overflow:hidden;
+transition:0.4s ease;
+cursor:pointer;
+position:relative;
+}
+
+.issue-card:hover{
+transform:translateY(-10px) scale(1.02);
+box-shadow:0 15px 35px rgba(0,0,0,0.4);
+}
+
+.issue-card img{
+width:100%;
+height:220px;
+object-fit:cover;
+transition:0.4s;
+}
+
+.issue-card:hover img{
+transform:scale(1.08);
+}
+
+.issue-content{
+padding:22px;
+}
+
+.issue-content h3{
+font-size:1.4rem;
+margin-bottom:10px;
+font-weight:600;
+}
+
+.issue-content p{
+font-size:0.95rem;
+color:#cbd5e1;
+line-height:1.6;
+}
+
+/* Badge */
+
+.badge{
+position:absolute;
+top:15px;
+right:15px;
+background:rgba(255,255,255,0.15);
+padding:8px 14px;
+border-radius:30px;
+font-size:0.8rem;
+backdrop-filter:blur(10px);
+border:1px solid rgba(255,255,255,0.2);
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.hero h1{
+font-size:2.4rem;
+}
+
+.hero p{
+font-size:1rem;
+}
+
+}
+
+</style>
+
+<div class="container">
+
+<div class="bg-glow"></div>
+<div class="bg-glow2"></div>
+
+<div class="hero">
+<h1>E-CivicHelper</h1>
+
+<p>
+Report civic problems in your city and help local authorities
+solve issues faster for a cleaner, safer, and smarter community.
+</p>
+</div>
+
+<div class="issue-grid">
+
+<!-- Potholes -->
+
+<div class="issue-card">
+
+<span class="badge">Road Safety</span>
+
+<img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop">
+
+<div class="issue-content">
+<h3>Potholes on Roads</h3>
+
+<p>
+Damaged roads and potholes can cause accidents and traffic issues.
+Help authorities repair them quickly.
+</p>
+</div>
+
+</div>
+
+<!-- Garbage -->
+
+<div class="issue-card">
+
+<span class="badge">Clean City</span>
+
+<img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=1200&auto=format&fit=crop">
+
+<div class="issue-content">
+<h3>Garbage Issues</h3>
+
+<p>
+Overflowing garbage affects hygiene and public health.
+Report waste problems to maintain cleanliness.
+</p>
+</div>
+
+</div>
+
+<!-- Water Leakage -->
+
+<div class="issue-card">
+
+<span class="badge">Water Supply</span>
+
+<img src="https://images.unsplash.com/photo-1502740479091-635887520276?q=80&w=1200&auto=format&fit=crop">
+
+<div class="issue-content">
+<h3>Water Leakage</h3>
+
+<p>
+Water leakage wastes valuable resources and damages infrastructure.
+Report leaks for immediate action.
+</p>
+</div>
+
+</div>
+
+<!-- Electricity -->
+
+<div class="issue-card">
+
+<span class="badge">Electricity</span>
+
+<img src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=1200&auto=format&fit=crop">
+
+<div class="issue-content">
+<h3>No Electricity</h3>
+
+<p>
+Power outages affect homes and businesses.
+Help electricity departments restore power faster.
+</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
+

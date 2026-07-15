@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#020617;
+overflow:hidden;
+}
+
+/* Background Glow */
+
+.bg1{
+position:absolute;
+width:450px;
+height:450px;
+background:#2563eb;
+filter:blur(150px);
+opacity:0.25;
+top:-120px;
+left:-120px;
+animation:float1 7s ease-in-out infinite;
+}
+
+.bg2{
+position:absolute;
+width:450px;
+height:450px;
+background:#7c3aed;
+filter:blur(150px);
+opacity:0.25;
+bottom:-120px;
+right:-120px;
+animation:float2 7s ease-in-out infinite;
+}
+
+@keyframes float1{
+0%{transform:translateY(0px);}
+50%{transform:translateY(30px);}
+100%{transform:translateY(0px);}
+}
+
+@keyframes float2{
+0%{transform:translateY(0px);}
+50%{transform:translateY(-30px);}
+100%{transform:translateY(0px);}
+}
+
+/* Main Container */
+
+.login-container{
+width:100%;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+position:relative;
+z-index:1;
+}
+
+/* Glass Card */
+
+.login-card{
+width:420px;
+padding:40px;
+border-radius:28px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(18px);
+border:1px solid rgba(255,255,255,0.1);
+box-shadow:0 20px 50px rgba(0,0,0,0.5);
+animation:fadeUp 1s ease;
+position:relative;
+overflow:hidden;
+}
+
+.login-card::before{
+content:'';
+position:absolute;
+width:180px;
+height:180px;
+background:rgba(255,255,255,0.05);
+border-radius:50%;
+top:-70px;
+right:-70px;
+}
+
+.login-card::after{
+content:'';
+position:absolute;
+width:120px;
+height:120px;
+background:rgba(255,255,255,0.05);
+border-radius:50%;
+bottom:-40px;
+left:-40px;
+}
+
+/* Animation */
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(40px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* Heading */
+
+.login-card h2{
+text-align:center;
+font-size:2.2rem;
+font-weight:700;
+margin-bottom:10px;
+background:linear-gradient(to right,#60a5fa,#c084fc);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+text-align:center;
+color:#cbd5e1;
+margin-bottom:30px;
+font-size:0.95rem;
+}
+
+/* Alert */
+
+.alert-box{
+background:rgba(239,68,68,0.15);
+border:1px solid rgba(239,68,68,0.4);
+padding:12px;
+border-radius:14px;
+margin-bottom:20px;
+color:#fecaca;
+font-size:0.9rem;
+}
+
+/* Input Group */
+
+.input-group{
+margin-bottom:22px;
+position:relative;
+}
+
+.input-group input{
+width:100%;
+padding:16px 18px;
+border:none;
+outline:none;
+border-radius:16px;
+background:rgba(255,255,255,0.08);
+color:white;
+font-size:1rem;
+transition:0.3s;
+border:1px solid rgba(255,255,255,0.08);
+}
+
+.input-group input:focus{
+border:1px solid #60a5fa;
+box-shadow:0 0 15px rgba(96,165,250,0.4);
+transform:scale(1.02);
+}
+
+.input-group input::placeholder{
+color:#cbd5e1;
+}
+
+/* Button */
+
+.login-btn{
+width:100%;
+padding:16px;
+border:none;
+border-radius:16px;
+background:linear-gradient(to right,#2563eb,#7c3aed);
+color:white;
+font-size:1rem;
+font-weight:600;
+cursor:pointer;
+transition:0.4s ease;
+margin-top:10px;
+box-shadow:0 10px 20px rgba(37,99,235,0.3);
+}
+
+.login-btn:hover{
+transform:translateY(-3px) scale(1.02);
+box-shadow:0 15px 30px rgba(37,99,235,0.5);
+}
+
+/* Bottom Text */
+
+.bottom-text{
+text-align:center;
+margin-top:20px;
+color:#cbd5e1;
+font-size:0.9rem;
+}
+
+.bottom-text a{
+color:#60a5fa;
+text-decoration:none;
+font-weight:500;
+}
+
+.bottom-text a:hover{
+text-decoration:underline;
+}
+
+/* Responsive */
+
+@media(max-width:500px){
+
+.login-card{
+padding:30px 25px;
+}
+
+.login-card h2{
+font-size:1.8rem;
+}
+
+}
+
+</style>
+
+<!-- Background -->
+
+<div class="bg1"></div>
+<div class="bg2"></div>
+
+<!-- Login Container -->
+
+<div class="login-container">
+
+<div class="login-card">
+
+<h2>Welcome Back</h2>
+
+<p class="subtitle">
+Login to continue using E-CivicHelper 🚀
+</p>
+
+<!-- Messages -->
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert-box">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<!-- Form -->
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="input-group">
+<input type="text"
+name="username"
+placeholder="👤 Username"
+required>
+</div>
+
+<div class="input-group">
+<input type="password"
+name="password"
+placeholder="🔒 Password"
+required>
+</div>
+
+<button type="submit" class="login-btn">
+✨ Login
+</button>
+
+</form>
+
+<!-- Bottom Link -->
+
+<div class="bottom-text">
+Don't have an account?
+<a href="{% url 'register' %}">
+Create Account
+</a>
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#020617;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* Background glow */
+.bg1{
+    position:fixed;
+    width:500px;
+    height:500px;
+    background:#2563eb;
+    filter:blur(160px);
+    opacity:0.22;
+    top:-120px;
+    left:-120px;
+    animation:float1 8s ease-in-out infinite;
+    z-index:0;
+}
+
+.bg2{
+    position:fixed;
+    width:500px;
+    height:500px;
+    background:#7c3aed;
+    filter:blur(160px);
+    opacity:0.22;
+    bottom:-120px;
+    right:-120px;
+    animation:float2 8s ease-in-out infinite;
+    z-index:0;
+}
+
+@keyframes float1{
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(35px);}
+    100%{transform:translateY(0px);}
+}
+
+@keyframes float2{
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(-35px);}
+    100%{transform:translateY(0px);}
+}
+
+/* Wrapper */
+.report-wrapper{
+    position:relative;
+    z-index:1;
+    min-height:100vh;
+    padding:50px 20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* Card */
+.card{
+    width:100%;
+    max-width:720px;
+    padding:40px;
+    border-radius:30px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,0.1);
+    box-shadow:0 20px 50px rgba(0,0,0,0.45);
+    position:relative;
+    overflow:hidden;
+    animation:fadeUp 0.9s ease;
+}
+
+.card::before{
+    content:'';
+    position:absolute;
+    width:180px;
+    height:180px;
+    background:rgba(255,255,255,0.05);
+    border-radius:50%;
+    top:-70px;
+    right:-70px;
+}
+
+.card::after{
+    content:'';
+    position:absolute;
+    width:120px;
+    height:120px;
+    background:rgba(255,255,255,0.04);
+    border-radius:50%;
+    bottom:-40px;
+    left:-40px;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* Header */
+.header{
+    margin-bottom:30px;
+    text-align:center;
+}
+
+.header h2{
+    font-size:2.3rem;
+    font-weight:700;
+    background:linear-gradient(to right,#60a5fa,#c084fc);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:10px;
+}
+
+.header p{
+    color:#cbd5e1;
+    font-size:0.98rem;
+    line-height:1.7;
+}
+
+/* Form */
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.full{
+    grid-column:1 / -1;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:15px 16px;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.08);
+    color:white;
+    outline:none;
+    transition:0.3s;
+    font-size:0.98rem;
+}
+
+input::placeholder,
+textarea::placeholder{
+    color:#cbd5e1;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border:1px solid #60a5fa;
+    box-shadow:0 0 14px rgba(96,165,250,0.35);
+    transform:scale(1.01);
+}
+
+textarea{
+    min-height:140px;
+    resize:none;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:500;
+    color:#e2e8f0;
+}
+
+/* File Upload */
+.file-box{
+    border:2px dashed rgba(255,255,255,0.18);
+    border-radius:18px;
+    padding:22px;
+    text-align:center;
+    background:rgba(255,255,255,0.05);
+    transition:0.3s;
+    cursor:pointer;
+}
+
+.file-box:hover{
+    background:rgba(255,255,255,0.08);
+    border-color:#60a5fa;
+}
+
+.file-box input{
+    padding:0;
+    border:none;
+    background:transparent;
+}
+
+/* Submit */
+button{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:16px;
+    background:linear-gradient(to right,#2563eb,#7c3aed);
+    color:white;
+    font-size:1rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.4s ease;
+    margin-top:8px;
+    box-shadow:0 10px 20px rgba(37,99,235,0.3);
+}
+
+button:hover{
+    transform:translateY(-3px) scale(1.02);
+    box-shadow:0 15px 30px rgba(37,99,235,0.45);
+}
+
+/* Responsive */
+@media(max-width:768px){
+    .card{
+        padding:28px 20px;
+    }
+
+    .header h2{
+        font-size:1.8rem;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+
+<div class="bg1"></div>
+<div class="bg2"></div>
+
+<div class="report-wrapper">
+    <div class="card">
+        <div class="header">
+            <h2>Create Civic Report</h2>
+            <p>Submit a civic issue with category, description, location, and photo so authorities can act quickly.</p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-grid">
+                <div class="full">
+                    <label for="title">Issue Title</label>
+                    <input type="text" name="title" id="title" placeholder="Example: Pothole near Main Street" required>
+                </div>
+
+                <div>
+                    <label for="category">Category</label>
+                    <select name="category" id="category" required>
+                        <option value="Road Issue">Road Damage</option>
+                        <option value="Garbage">Garbage</option>
+                        <option value="Water Leakage">Water Leakage</option>
+                        <option value="Street Light">Street Light</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="location">Location</label>
+                    <input type="text" name="location" id="location" placeholder="Enter location or area name" required>
+                </div>
+
+                <div class="full">
+                    <label for="description">Description</label>
+                    <textarea name="description" id="description" placeholder="Write complete details about the issue..." required></textarea>
+                </div>
+
+                <div class="full">
+                    <label>Upload Photo</label>
+                    <div class="file-box">
+                        <input type="file" name="image" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="full">
+                    <button type="submit">Submit Report</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
