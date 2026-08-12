@@ -34,6 +34,24 @@ Authentication: Django Built-in Auth System
 
 Image Upload: Pillow
 
+📁 Project Structure
+civic_project/
+│
+├── civic_project/
+│   ├── settings.py
+│   ├── urls.py
+│
+├── reports/
+│   ├── models.py
+│   ├── views.py
+│   ├── forms.py
+│   ├── urls.py
+│   ├── templates/
+│
+├── media/
+├── db.sqlite3
+├── manage.py
+
 User (ForeignKey)
 
 Title
