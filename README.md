@@ -34,20 +34,6 @@ Authentication: Django Built-in Auth System
 
 Image Upload: Pillow
 
-📁 Project Structure civic_project/ │ ├── civic_project/ │ ├── settings.py │ ├── urls.py │ ├── reports/ │ ├── models.py │ ├── views.py │ ├── forms.py │ ├── urls.py │ ├── templates/ │ ├── media/ ├── db.sqlite3 ├── manage.py ⚙️ Installation & Setup 1️⃣ Clone Repository git clone https://github.com/sonu677/CIVICREPO-PYTHON-PROJECT.git cd civic-issue-reporting 2️⃣ Create Virtual Environment (Recommended) python -m venv venv source venv/bin/activate # Mac/Linux venv\Scripts\activate # Windows 3️⃣ Install Dependencies pip install -r requirements.txt
-
-If you don’t have requirements.txt:
-
-pip install django pillow 4️⃣ Apply Migrations python manage.py makemigrations python manage.py migrate 5️⃣ Create Superuser python manage.py createsuperuser 6️⃣ Run Server python manage.py runserver
-
-Open browser:
-
-http://127.0.0.1:8000/
-
-Admin Panel:
-
-http://127.0.0.1:8000/admin/ 🗄 Database Model Report Model Fields:
-
 User (ForeignKey)
 
 Title
